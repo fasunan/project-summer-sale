@@ -1,98 +1,94 @@
-document.getElementById('card-1').addEventListener('click', function(){
-   const cardValue=document.getElementById('card-1value');
-   const newCardValueString=cardValue.innerText;
-   const addingCardValue=parseFloat(newCardValueString);
-   
-   const totalPrice=document.getElementById('add-total');
-   const newAddTotalString=totalPrice.innerText;
-   const newAddTotal=parseFloat(newAddTotalString);
-   
-   const addTotal= addingCardValue + newAddTotal;
-   totalPrice.innerText=addTotal;
-   
-})
-// card-2
-document.getElementById('card-2').addEventListener('click', function(){
-   const cardTwoValue=document.getElementById('card-2value');
-   const newCardValueString=cardTwoValue.innerText;
-   const addingCardTwoValue=parseFloat(newCardValueString);
-   
-   const totalPrice=document.getElementById('add-total');
-   const newAddTotalString=totalPrice.innerText;
-   const newAddTotal=parseFloat(newAddTotalString);
-   
-   const addTotal= addingCardTwoValue + newAddTotal;
-   totalPrice.innerText=addTotal;
-   
-})
-// card-3
-document.getElementById('card-3').addEventListener('click', function(){
-   const thirdCardValue=document.getElementById('card-3value');
-   const newCardValueString=thirdCardValue.innerText;
-   const thirdCardValueAdd=parseFloat(newCardValueString);
-   
-   const totalPrice=document.getElementById('add-total');
-   const newAddTotalString=totalPrice.innerText;
-   const newAddTotal=parseFloat(newAddTotalString);
-   
-   const addTotal= thirdCardValueAdd + newAddTotal;
-   totalPrice.innerText=addTotal;
-   
-})
 
-// card-4
-document.getElementById('card-4').addEventListener('click', function(){
-   const fourCardValue=document.getElementById('card-4value');
-   const newFourCardValueString=fourCardValue.innerText;
-   const addingFourCard=parseFloat(newFourCardValueString);
-   
-   const totalPrice=document.getElementById('add-total');
-   const newAddTotalString=totalPrice.innerText;
-   const newAddTotal=parseFloat(newAddTotalString);
-   
-   const addTotal= addingFourCard + newAddTotal;
-   totalPrice.innerText=addTotal;
-   
-})
+let cardCount = 0;
+let dataTotalAmount = 0;
 
-// // card-5
-document.getElementById('card-5').addEventListener('click', function(){
-   const cardFiveValue=document.getElementById('card-5value');
-   const newCardValueString=cardFiveValue.innerText;
-   const addingCardFiveValue=parseFloat(newCardValueString);
-   
-   const totalPrice=document.getElementById('add-total');
-   const newAddTotalString=totalPrice.innerText;
-   const newAddTotal=parseFloat(newAddTotalString);
-   
-   const addTotal= addingCardFiveValue + newAddTotal;
-   totalPrice.innerText=addTotal;
-   
-})
+const modal = document.getElementById("my_modal_8");
 
-// // card-6
-document.getElementById('card-6').addEventListener('click', function(){
-   const cardSixValue=document.getElementById('card-6value');
-   const newCardValueString=cardSixValue.innerText;
-   const addingCardSixValue=parseFloat(newCardValueString);
-   
-   const totalPrice=document.getElementById('add-total');
-   const newAddTotalString=totalPrice.innerText;
-   const newAddTotal=parseFloat(newAddTotalString);
-   
-   const addTotal= addingCardSixValue + newAddTotal;
-   totalPrice.innerText=addTotal;
-   
-   
-})
+const buttonApply = document.getElementById("btn-apply");
 
+const purchaseButton = document.getElementById("btn-purchase");
 
+const sellCouponButton = document.getElementById("sell-coupon");
 
+const insertedCoupon = document.getElementById("coupon-code");
 
-const discountPriceField=document.getElementById('discount-price');
-const discountPriceString=discountPriceField.innerText;
-const newDiscountPrice=parseFloat(discountPriceString);
-console.log(
-   discountPrice
-);
-const discountPrice= 20%  newAddTotal;
+function handleCardClick(event) {
+
+  cardCount++;
+
+  const cardName = event.currentTarget.querySelector(".text-xl.font-medium");
+
+  const cardNameText = cardName.textContent;
+
+  const products = document.querySelector(".products");
+  const cardNameElement = document.createElement("li");
+  cardNameElement.textContent = `${cardCount}. ${cardNameText}`;
+
+  products.appendChild(cardNameElement);
+
+  const cardValue = event.currentTarget.querySelector(".card-value");
+
+  const newCardValueString = cardValue.innerText;
+  const addingCardValue = parseFloat(newCardValueString);
+
+  const totalPrice = document.getElementById("add-total");
+
+  dataTotalAmount = addingCardValue + dataTotalAmount;
+
+  totalPrice.innerText = dataTotalAmount;
+
+  if (dataTotalAmount > 0) {
+
+    purchaseButton.disabled = false;
+
+    const totalPriceData = document.getElementById("add-total");
+    const discountData = document.getElementById("discount");
+    const totalPriceAfterDiscountData = document.getElementById("total");
+
+    let totalPriceText = parseInt(totalPriceData.innerText);
+
+    totalPriceAfterDiscountData.innerText = totalPriceText;
+
+    const applyButton = document.getElementById("btn-apply");
+    const coupon = sellCouponButton.innerText;
+
+    applyButton.addEventListener("click", function () {
+
+      const inputCoupon = insertedCoupon.value;
+
+      if (coupon === inputCoupon) {
+
+        const discount = totalPriceText * 0.2;
+        const totalAmountAfterDiscount = totalPriceText - discount;
+
+        discountData.innerText = discount;
+        totalPriceAfterDiscountData.innerText = totalAmountAfterDiscount;
+      }
+    });
+
+    if (dataTotalAmount > 0) {
+
+      purchaseButton.addEventListener("click", function () {
+        modal.classList.remove("hidden");
+      });
+
+      modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+          modal.classList.add("hidden");
+        }
+      });
+    }
+  }
+
+  if (dataTotalAmount >= 200) {
+
+    buttonApply.disabled = false;
+  }
+}
+
+const cardElements = document.querySelectorAll(".card");
+
+cardElements.forEach(function (cardElement) {
+
+  cardElement.addEventListener("click", handleCardClick);
+});
